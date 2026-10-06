@@ -7760,14 +7760,16 @@
     }
 
     function getBookingDetails() {
-      const name = (bookNameInput?.value || "").trim() || "Prospective Client / Partner";
-      const email = (bookEmailInput?.value || "").trim() || "Not provided";
+      const rawName = (bookNameInput?.value || "").trim();
+      const rawEmail = (bookEmailInput?.value || "").trim();
+      const name = rawName || "Prospective Client / Partner";
+      const email = rawEmail || "Not provided";
       const date = bookDateInput?.value || new Date().toISOString().split("T")[0];
       const slot = bookSlotSelect?.value || "02:00 PM - 03:00 PM IST";
       const notes = (bookNotesInput?.value || "").trim();
       const services = getSelectedServices();
 
-      return { name, email, date, slot, notes, services };
+      return { name, rawName, email, rawEmail, date, slot, notes, services };
     }
 
     // Generate Google Calendar Link & launch
@@ -7812,13 +7814,14 @@
 
     // Generate mailto
     function sendEmailRequest(details, showUserToast = true) {
-      const subject = `[Project Call Scheduled] ${details.name} - ${details.services[0]}`;
+      const displayName = details.rawName || details.name;
+      const subject = `[Project Call Scheduled] ${displayName} - ${details.services[0]}`;
       const body = [
         `Hi Varun,`,
         ``,
         `I would like to schedule a strategy and project call with you.`,
         ``,
-        `Client / Company: ${details.name}`,
+        `Name / Company: ${displayName}`,
         `Email: ${details.email}`,
         `Preferred Date: ${details.date}`,
         `Preferred Time Slot: ${details.slot}`,
@@ -7830,7 +7833,7 @@
         `Please confirm your availability on Google Calendar or reply to this email.`,
         ``,
         `Regards,`,
-        details.name
+        displayName
       ].join("\n");
 
       const mailto = `mailto:varun.c.works@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -7895,7 +7898,17 @@
     function updateWhatsappLink() {
       if (!btnWhatsappBooking) return;
       const details = getBookingDetails();
-      const text = `Hi Varun! I would like to schedule a call on ${details.date} (${details.slot}). Services: ${details.services.slice(0, 2).join(", ")}. My name is ${details.name}.`;
+      const namePart = details.rawName ? `My name is ${details.rawName}.` : "";
+      const servicesPart = details.services.length > 0 ? `Services of interest: ${details.services.slice(0, 2).join(", ")}.` : "";
+      const textParts = [
+        "Hi Varun!",
+        "I would like to schedule a strategy call regarding a project.",
+        namePart,
+        servicesPart,
+        `Preferred date/time: ${details.date} (${details.slot}).`
+      ].filter(Boolean);
+
+      const text = textParts.join(" ");
       btnWhatsappBooking.href = `https://wa.me/918439809781?text=${encodeURIComponent(text)}`;
     }
 
@@ -7925,6 +7938,31 @@
         downloadIcsFile(getBookingDetails());
       });
     }
+
+    // Real-time synchronization across name, email, date, time slot, notes
+    if (bookNameInput) {
+      bookNameInput.addEventListener("input", updateWhatsappLink);
+      bookNameInput.addEventListener("change", updateWhatsappLink);
+    }
+    if (bookEmailInput) {
+      bookEmailInput.addEventListener("input", updateWhatsappLink);
+      bookEmailInput.addEventListener("change", updateWhatsappLink);
+    }
+    if (bookDateInput) {
+      bookDateInput.addEventListener("change", updateWhatsappLink);
+    }
+    if (bookSlotSelect) {
+      bookSlotSelect.addEventListener("change", updateWhatsappLink);
+    }
+    if (bookNotesInput) {
+      bookNotesInput.addEventListener("input", updateWhatsappLink);
+    }
+    if (btnWhatsappBooking) {
+      btnWhatsappBooking.addEventListener("click", updateWhatsappLink);
+    }
+
+    // Initial sync
+    updateWhatsappLink();
 
     // Modal Openers
     const btnBio = document.querySelector("#btn-bio");
