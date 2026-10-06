@@ -213,6 +213,7 @@
       transform: translate(16px, 18px);
       transition: opacity 120ms ease;
       pointer-events: none;
+      -webkit-backdrop-filter: blur(8px);
       backdrop-filter: blur(8px);
     }
 
@@ -289,6 +290,7 @@
         border-color 180ms ease,
         background 180ms ease,
         transform 180ms var(--ease-out);
+      -webkit-backdrop-filter: blur(8px);
       backdrop-filter: blur(8px);
     }
 
@@ -402,6 +404,7 @@
       transform: translateY(28px);
       transition: opacity 620ms var(--ease-out), transform 620ms var(--ease-out);
       pointer-events: none;
+      -webkit-backdrop-filter: blur(14px);
       backdrop-filter: blur(14px);
     }
 
@@ -1603,6 +1606,7 @@
       border-radius: 9999px;
       border: 1px solid var(--rule);
       background: rgba(255, 255, 255, 0.05);
+      -webkit-backdrop-filter: blur(8px);
       backdrop-filter: blur(8px);
       color: var(--ink);
       font-family: var(--mono);
@@ -1737,6 +1741,7 @@
       inset: 0;
       z-index: 999;
       background: rgba(0, 0, 0, 0.75);
+      -webkit-backdrop-filter: blur(12px);
       backdrop-filter: blur(12px);
       display: flex;
       align-items: center;
@@ -2523,18 +2528,6 @@
     }
 
   </style>
-  
-  <!-- Safari / WebKit ES Module & Importmap Polyfill -->
-  <script async src="https://cdn.jsdelivr.net/npm/es-module-shims@1.10.0/dist/es-module-shims.js"></script>
-
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
-      }
-    }
-  </script>
 </head>
 <body>
   <main class="experience" id="experience">
@@ -2901,11 +2894,11 @@
     </div>
 
   <script type="module">
-    import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
-    import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/controls/OrbitControls.js";
-    import { RoomEnvironment } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/environments/RoomEnvironment.js";
-    import { RoundedBoxGeometry } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/geometries/RoundedBoxGeometry.js";
-    import { RectAreaLightUniformsLib } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/lights/RectAreaLightUniformsLib.js";
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+    import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+    import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
+    import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUniformsLib.js";
 
     // Safari Canvas2D letterSpacing safeguard
     try {
@@ -6869,6 +6862,7 @@
       if (!heroTouchDrag.active || event.pointerId !== heroTouchDrag.pointerId) return;
       heroTouchDrag.active = false;
       heroTouchDrag.pointerId = null;
+      try { canvas.releasePointerCapture?.(event.pointerId); } catch (e) {}
 
       if (mode !== "hero") return;
 
