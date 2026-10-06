@@ -2122,19 +2122,35 @@
     }
 
   
-    /* === ALWAYS-VISIBLE RETURN TO SHELF LOBBY BUTTON === */
-    .fixed-lobby-btn {
+    /* === BOTTOM-LEFT DETAIL CONTROLS: CLOSE BOOK & RESET VIEW === */
+    .bottom-left-detail-actions {
       position: fixed;
-      top: 20px;
-      left: 20px;
+      bottom: 24px;
+      left: 24px;
       z-index: 99999;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 10px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition: opacity 0.28s cubic-bezier(0.2, 0.72, 0.24, 1), transform 0.28s cubic-bezier(0.2, 0.72, 0.24, 1);
+    }
+    .experience.mode-detail .bottom-left-detail-actions,
+    .experience.is-opening .bottom-left-detail-actions,
+    .experience.is-reading .bottom-left-detail-actions {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      transform: translateY(0) !important;
+    }
+    .action-btn-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       padding: 10px 18px 10px 14px;
       background: rgba(14, 16, 23, 0.94);
       color: #f8fafc;
-      border: 1px solid rgba(255, 255, 255, 0.24);
+      border: 1px solid rgba(255, 255, 255, 0.22);
       border-radius: 9999px;
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
@@ -2144,41 +2160,59 @@
       font-weight: 600;
       letter-spacing: -0.01em;
       cursor: pointer;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(-8px);
-      transition: opacity 0.28s var(--ease-out), transform 0.28s var(--ease-out), background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      transition: all 0.2s ease;
     }
-    .experience.mode-detail .fixed-lobby-btn,
-    .experience.is-opening .fixed-lobby-btn,
-    .experience.is-reading .fixed-lobby-btn {
-      opacity: 1 !important;
-      pointer-events: auto !important;
-      transform: translateY(0) !important;
-    }
-    .fixed-lobby-btn:hover {
+    .action-btn-pill:hover {
       background: rgba(30, 34, 46, 0.98);
       border-color: rgba(249, 115, 22, 0.8);
       box-shadow: 0 12px 36px rgba(0, 0, 0, 0.8), 0 0 20px rgba(249, 115, 22, 0.35);
-      transform: translateY(-2px) !important;
+      transform: translateY(-2px);
     }
-    .fixed-lobby-btn svg {
+    .action-btn-close {
+      background: rgba(249, 115, 22, 0.16);
+      border-color: rgba(249, 115, 22, 0.5);
+      color: #fb923c;
+    }
+    .action-btn-close:hover {
+      background: #f97316;
+      border-color: #f97316;
+      color: #ffffff;
+    }
+    .action-btn-close svg {
       transition: transform 0.2s ease;
     }
-    .fixed-lobby-btn:hover svg {
+    .action-btn-close:hover svg {
       transform: translateX(-3px);
     }
+    .action-btn-reset {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.18);
+      color: #cbd5e1;
+    }
+    .action-btn-reset:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.4);
+      color: #ffffff;
+    }
+    .action-btn-reset svg {
+      transition: transform 0.3s ease;
+    }
+    .action-btn-reset:hover svg {
+      transform: rotate(-45deg);
+    }
     @media (max-width: 768px) {
-      .fixed-lobby-btn {
-        top: 12px;
-        left: 12px;
+      .bottom-left-detail-actions {
+        bottom: 16px;
+        left: 14px;
+        gap: 8px;
+      }
+      .action-btn-pill {
         padding: 8px 14px 8px 10px;
         font-size: 12px;
       }
     }
 
-  
-    /* === APPLE-GRADE INTERACTIVE APPOINTMENT & SERVICE BOOKING MODAL === */
+  /* === APPLE-GRADE INTERACTIVE APPOINTMENT & SERVICE BOOKING MODAL === */
     .bio-modal-overlay {
       position: fixed;
       inset: 0;
@@ -2500,6 +2534,24 @@
 </head>
 <body>
   <main class="experience" id="experience">
+
+    <!-- Bottom-Left Action Controls for Book Detail View -->
+    <div class="bottom-left-detail-actions" id="bottom-left-detail-actions">
+      <button class="action-btn-pill action-btn-close" id="fixed-lobby-btn" type="button" aria-label="Return to Bookshelf Lobby">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        <span>Back to Bookshelf</span>
+      </button>
+      <button class="action-btn-pill action-btn-reset" id="bottom-reset-btn" type="button" aria-label="Reset Book Inspection View">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+          <path d="M3 3v5h5"/>
+        </svg>
+        <span>Reset View</span>
+      </button>
+    </div>
+
     <div class="scene-shell">
       <canvas id="scene" aria-hidden="true"></canvas>
     </div>
@@ -2667,7 +2719,9 @@
     <!-- Bio & Contact Modal -->
     
     <!-- Varun Chaturvedi: Interactive Appointment & Services Scheduling Modal -->
-    <div class="bio-modal-overlay" id="bio-modal" role="dialog" aria-modal="true" aria-hidden="true">
+    </main>
+
+  <div class="bio-modal-overlay" id="bio-modal" role="dialog" aria-modal="true" aria-hidden="true">
       <div class="bio-modal-content">
         <button class="bio-modal-close" id="bio-modal-close" aria-label="Close dialog">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
@@ -2841,8 +2895,6 @@
         </div>
       </div>
     </div>
-
-  </main>
 
   <script type="module">
     import * as THREE from "three";
@@ -6738,6 +6790,80 @@
       }
     }
 
+    
+    // === MOBILE TOUCH & POINTER SWIPE FOR BOOKSHELF ===
+    const heroTouchDrag = {
+      active: false,
+      pointerId: null,
+      startX: 0,
+      startY: 0,
+      lastX: 0,
+      lastTime: 0,
+      velocity: 0,
+      moved: false
+    };
+
+    function onHeroPointerDown(event) {
+      if (mode !== "hero") return;
+      if (event.isPrimary === false) return;
+      if (event.button !== 0 && event.pointerType === "mouse") return;
+      if (event.target.closest("button") || event.target.closest("a") || event.target.closest(".markers")) return;
+
+      heroTouchDrag.active = true;
+      heroTouchDrag.pointerId = event.pointerId;
+      heroTouchDrag.startX = event.clientX;
+      heroTouchDrag.startY = event.clientY;
+      heroTouchDrag.lastX = event.clientX;
+      heroTouchDrag.lastTime = performance.now();
+      heroTouchDrag.velocity = 0;
+      heroTouchDrag.moved = false;
+
+      canvas.setPointerCapture?.(event.pointerId);
+    }
+
+    function onHeroPointerMove(event) {
+      if (!heroTouchDrag.active || event.pointerId !== heroTouchDrag.pointerId) return;
+      if (mode !== "hero") return;
+
+      const dx = event.clientX - heroTouchDrag.lastX;
+      const totalDx = Math.abs(event.clientX - heroTouchDrag.startX);
+      const totalDy = Math.abs(event.clientY - heroTouchDrag.startY);
+
+      if (totalDx > 6 || totalDy > 6) {
+        heroTouchDrag.moved = true;
+      }
+
+      const now = performance.now();
+      const dt = Math.max(0.008, (now - heroTouchDrag.lastTime) / 1000);
+      const instantVelocity = -dx / (window.innerWidth * 0.45);
+      heroTouchDrag.velocity = lerp(heroTouchDrag.velocity, instantVelocity / dt, 0.4);
+
+      // Sensitivity scaled by viewport width for 1:1 finger tracking
+      const sensitivity = 2.6 / Math.max(320, window.innerWidth);
+      targetPosition -= dx * sensitivity;
+      wheelIdle = 0.28;
+
+      heroTouchDrag.lastX = event.clientX;
+      heroTouchDrag.lastTime = now;
+      requestFrame();
+    }
+
+    function onHeroPointerEnd(event) {
+      if (!heroTouchDrag.active || event.pointerId !== heroTouchDrag.pointerId) return;
+      heroTouchDrag.active = false;
+      heroTouchDrag.pointerId = null;
+
+      if (mode !== "hero") return;
+
+      if (heroTouchDrag.moved) {
+        const inertia = clamp(heroTouchDrag.velocity * 0.2, -2.2, 2.2);
+        targetPosition += inertia;
+        wheelIdle = 0.35;
+        requestFrame();
+        setTimeout(() => { heroTouchDrag.moved = false; }, 200);
+      }
+    }
+
     function onCanvasClick(event) {
       if (mode === "detail" && !readingOpen && event.button === 0) {
         if (!detailPress.allowClick) return;
@@ -6748,7 +6874,7 @@
         setReadingOpen(true);
         return;
       }
-      if (mode !== "hero" || event.button !== 0) return;
+      if (mode !== "hero" || event.button !== 0 || heroTouchDrag.moved) return;
       setPointerFromEvent(event);
       const clickedBookIndex = bookIndexAtPointer();
       if (clickedBookIndex < 0) return;
@@ -7444,6 +7570,13 @@
       resize();
 
       canvas.addEventListener("pointermove", onPointerMove);
+
+      // Mobile touch & drag listeners for bookshelf scrolling
+      canvas.addEventListener("pointerdown", onHeroPointerDown, { passive: true });
+      canvas.addEventListener("pointermove", onHeroPointerMove, { passive: true });
+      canvas.addEventListener("pointerup", onHeroPointerEnd, { passive: true });
+      canvas.addEventListener("pointercancel", onHeroPointerEnd, { passive: true });
+
       canvas.addEventListener("pointerleave", onPointerLeave);
       canvas.addEventListener("click", onCanvasClick);
       canvas.addEventListener("pointerdown", onDetailBookPointerDown, { capture: true });
@@ -7471,12 +7604,28 @@
       inspectButton.addEventListener("click", () => openDetail(inspectButton));
       closeButton.addEventListener("click", closeDetail);
 
+    
     const fixedLobbyBtn = document.querySelector("#fixed-lobby-btn");
     if (fixedLobbyBtn) {
       fixedLobbyBtn.addEventListener("click", (e) => {
         e.preventDefault();
         closeDetail();
       });
+    }
+
+    const bottomResetBtn = document.querySelector("#bottom-reset-btn");
+    if (bottomResetBtn) {
+      bottomResetBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        resetInspectionView();
+      });
+    }
+
+    const bioModalContent = document.querySelector(".bio-modal-content");
+    if (bioModalContent) {
+      bioModalContent.addEventListener("wheel", (e) => {
+        e.stopPropagation();
+      }, { passive: true });
     }
 
       toggleBookButton.addEventListener("click", () => setReadingOpen(!readingOpen));
