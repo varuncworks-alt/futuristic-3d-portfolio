@@ -5948,39 +5948,6 @@
       }
     }
 
-    // Modal listeners
-    const bioModal = document.querySelector("#bio-modal");
-    const btnBio = document.querySelector("#btn-bio");
-    const btnContactModal = document.querySelector("#btn-contact-modal");
-    const btnBioClose = document.querySelector("#bio-modal-close");
-
-    if (btnBio && bioModal) {
-      btnBio.addEventListener("click", () => {
-        bioModal.classList.add("active");
-        bioModal.setAttribute("aria-hidden", "false");
-      });
-    }
-    if (btnContactModal && bioModal) {
-      btnContactModal.addEventListener("click", () => {
-        bioModal.classList.add("active");
-        bioModal.setAttribute("aria-hidden", "false");
-      });
-    }
-    if (btnBioClose && bioModal) {
-      btnBioClose.addEventListener("click", () => {
-        bioModal.classList.remove("active");
-        bioModal.setAttribute("aria-hidden", "true");
-      });
-    }
-    if (bioModal) {
-      bioModal.addEventListener("click", (e) => {
-        if (e.target === bioModal) {
-          bioModal.classList.remove("active");
-          bioModal.setAttribute("aria-hidden", "true");
-        }
-      });
-    }
-
     function getSpreadLabels(book) {
       return [
         "Title page",
@@ -7530,44 +7497,6 @@
     }
 
     
-    // Standalone Modal Initialization
-    function setupBioModal() {
-      const modal = document.querySelector("#bio-modal");
-      const btnB = document.querySelector("#btn-bio");
-      const btnC = document.querySelector("#btn-contact-modal");
-      const btnClose = document.querySelector("#bio-modal-close");
-
-      function openModal(e) {
-        if (e) e.preventDefault();
-        if (modal) {
-          modal.classList.add("active");
-          modal.setAttribute("aria-hidden", "false");
-        }
-      }
-
-      function closeModal(e) {
-        if (e) e.preventDefault();
-        if (modal) {
-          modal.classList.remove("active");
-          modal.setAttribute("aria-hidden", "true");
-        }
-      }
-
-      if (btnB) btnB.onclick = openModal;
-      if (btnC) btnC.onclick = openModal;
-      if (btnClose) btnClose.onclick = closeModal;
-      if (modal) {
-        modal.onclick = (e) => {
-          if (e.target === modal) closeModal(e);
-        };
-      }
-    }
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", setupBioModal);
-    } else {
-      setupBioModal();
-    }
-
     initialize().catch(() => {
       showFallback("The interactive shelf could not be prepared. The complete static catalog remains available.");
     });
