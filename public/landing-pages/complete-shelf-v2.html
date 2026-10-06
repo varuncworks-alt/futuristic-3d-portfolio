@@ -2523,6 +2523,10 @@
     }
 
   </style>
+  
+  <!-- Safari / WebKit ES Module & Importmap Polyfill -->
+  <script async src="https://cdn.jsdelivr.net/npm/es-module-shims@1.10.0/dist/es-module-shims.js"></script>
+
   <script type="importmap">
     {
       "imports": {
@@ -2897,11 +2901,24 @@
     </div>
 
   <script type="module">
-    import * as THREE from "three";
-    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-    import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
-    import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
-    import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUniformsLib.js";
+    import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
+    import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/controls/OrbitControls.js";
+    import { RoomEnvironment } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/environments/RoomEnvironment.js";
+    import { RoundedBoxGeometry } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/geometries/RoundedBoxGeometry.js";
+    import { RectAreaLightUniformsLib } from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/lights/RectAreaLightUniformsLib.js";
+
+    // Safari Canvas2D letterSpacing safeguard
+    try {
+      const _testCtx = document.createElement("canvas").getContext("2d");
+      if (!("letterSpacing" in _testCtx)) {
+        Object.defineProperty(CanvasRenderingContext2D.prototype, "letterSpacing", {
+          get() { return "0px"; },
+          set(v) {},
+          configurable: true
+        });
+      }
+    } catch (e) {}
+
 
     const BOOKS = [
       {
@@ -6470,7 +6487,7 @@
         capturedPointerId !== null
         && canvas.hasPointerCapture?.(capturedPointerId)
       ) {
-        canvas.releasePointerCapture(capturedPointerId);
+        try { canvas.releasePointerCapture(capturedPointerId); } catch (e) {}
       }
     }
 
@@ -6618,7 +6635,7 @@
         : "page";
       controls.enabled = false;
       canvas.classList.add("has-page-hover", "is-page-dragging");
-      canvas.setPointerCapture?.(event.pointerId);
+      try { try { canvas.setPointerCapture?.(event.pointerId); } catch (e) {} } catch (e) {}
       requestFrame();
     }
 
@@ -7487,34 +7504,54 @@
     }
 
     async function initialize() {
-      const woodTexturePromise = woodTextureImage.decode().then(
+      const woodTexturePromise = woodTextureImage.decode ? woodTextureImage.decode().then(
         () => true,
         () => false
-      );
+      ) : Promise.resolve(false);
 
+      // Fast font check with 400ms timeout so Safari never hangs
       try {
-        await document.fonts.load("600 82px Inter");
-      } catch (error) {
-        // The system sans-serif fallback keeps the interface usable offline.
-      }
+        if (document.fonts && document.fonts.load) {
+          await Promise.race([
+            document.fonts.load("600 82px Inter"),
+            new Promise((r) => setTimeout(r, 400))
+          ]);
+        }
+      } catch (error) {}
 
+      // Fast image decode with 400ms timeout
       try {
-        await coverAtlasImage.decode();
+        if (coverAtlasImage.decode) {
+          await Promise.race([
+            coverAtlasImage.decode(),
+            new Promise((r) => setTimeout(r, 400))
+          ]);
+        }
         coverAtlasReady = false;
       } catch (error) {
         coverAtlasReady = false;
       }
 
+      // Robust WebGL context creation across iOS Safari, Low Power Mode & Desktop
       try {
         renderer = new THREE.WebGLRenderer({
           canvas,
-          antialias: true,
+          antialias: window.innerWidth > 768,
           alpha: true,
-          powerPreference: "high-performance"
+          powerPreference: "default",
+          failIfMajorPerformanceCaveat: false
         });
       } catch (error) {
-        showFallback("WebGL is unavailable in this browser. The complete static catalog remains available.");
-        return;
+        try {
+          renderer = new THREE.WebGLRenderer({
+            canvas,
+            antialias: false,
+            alpha: true
+          });
+        } catch (err2) {
+          showFallback("WebGL is unavailable in this browser. The complete static catalog remains available.");
+          return;
+        }
       }
 
       renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -7526,11 +7563,15 @@
 
       scene = new THREE.Scene();
       scene.fog = new THREE.FogExp2(0x06070a, 0.032);
-      const pmremGenerator = new THREE.PMREMGenerator(renderer);
-      environmentTarget = pmremGenerator.fromScene(new RoomEnvironment(), 0.04);
-      scene.environment = environmentTarget.texture;
-      scene.environmentIntensity = 0.72;
-      pmremGenerator.dispose();
+      try {
+        const pmremGenerator = new THREE.PMREMGenerator(renderer);
+        environmentTarget = pmremGenerator.fromScene(new RoomEnvironment(), 0.04);
+        scene.environment = environmentTarget.texture;
+        scene.environmentIntensity = 0.72;
+        pmremGenerator.dispose();
+      } catch (pmremErr) {
+        console.warn("RoomEnvironment fallback:", pmremErr);
+      }
 
       camera = new THREE.PerspectiveCamera(32, 1, 0.1, 60);
       shelfStage = new THREE.Group();
