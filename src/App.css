@@ -190,7 +190,8 @@
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background: #080808;
+  background: #06070a;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Honest", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .shader-frame {
@@ -203,7 +204,7 @@
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background: #080808;
+  background: #06070a;
   z-index: 1;
 }
 

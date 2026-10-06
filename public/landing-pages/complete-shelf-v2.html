@@ -15,17 +15,17 @@
   <style>
     :root {
       color-scheme: dark;
-      --paper: #171a24;
-      --paper-deep: #10131b;
-      --paper-pale: #f1eadf;
-      --ink: #f4eee6;
-      --ink-soft: #b9b4ae;
-      --walnut: #3a2118;
-      --walnut-deep: #1c0e0a;
-      --rule: rgba(244, 238, 230, 0.24);
-      --accent: #c87046;
-      --serif: "Iowan Old Style", "Baskerville", "Times New Roman", serif;
-      --mono: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      --paper: #06070a;
+      --paper-deep: #020305;
+      --paper-pale: #ffffff;
+      --ink: #f8fafc;
+      --ink-soft: #94a3b8;
+      --walnut: #141720;
+      --walnut-deep: #07080c;
+      --rule: rgba(255, 255, 255, 0.12);
+      --accent: #f97316;
+      --serif: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Honest", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --mono: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Honest", "Helvetica Neue", Helvetica, Arial, sans-serif;
       --ease-out: cubic-bezier(0.2, 0.72, 0.24, 1);
     }
 
@@ -2121,6 +2121,373 @@
       }
     }
 
+  
+    /* === ALWAYS-VISIBLE RETURN TO SHELF LOBBY BUTTON === */
+    .fixed-lobby-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 99999;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px 10px 14px;
+      background: rgba(14, 16, 23, 0.94);
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 9999px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      font-family: var(--serif);
+      font-size: 13.5px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-8px);
+      transition: opacity 0.28s var(--ease-out), transform 0.28s var(--ease-out), background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .experience.mode-detail .fixed-lobby-btn,
+    .experience.is-opening .fixed-lobby-btn,
+    .experience.is-reading .fixed-lobby-btn {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      transform: translateY(0) !important;
+    }
+    .fixed-lobby-btn:hover {
+      background: rgba(30, 34, 46, 0.98);
+      border-color: rgba(249, 115, 22, 0.8);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.8), 0 0 20px rgba(249, 115, 22, 0.35);
+      transform: translateY(-2px) !important;
+    }
+    .fixed-lobby-btn svg {
+      transition: transform 0.2s ease;
+    }
+    .fixed-lobby-btn:hover svg {
+      transform: translateX(-3px);
+    }
+    @media (max-width: 768px) {
+      .fixed-lobby-btn {
+        top: 12px;
+        left: 12px;
+        padding: 8px 14px 8px 10px;
+        font-size: 12px;
+      }
+    }
+
+  
+    /* === APPLE-GRADE INTERACTIVE APPOINTMENT & SERVICE BOOKING MODAL === */
+    .bio-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      background: rgba(3, 4, 7, 0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s cubic-bezier(0.2, 0.72, 0.24, 1);
+    }
+    .bio-modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .bio-modal-content {
+      position: relative;
+      width: 100%;
+      max-width: 680px;
+      max-height: 92vh;
+      overflow-y: auto;
+      background: rgba(14, 17, 24, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 20px;
+      padding: 28px;
+      color: #f8fafc;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+    }
+    .bio-modal-content::-webkit-scrollbar {
+      width: 6px;
+    }
+    .bio-modal-content::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 999px;
+    }
+    .bio-modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      z-index: 10;
+    }
+    .bio-modal-close:hover {
+      background: rgba(255, 255, 255, 0.18);
+      color: #fff;
+      transform: scale(1.05);
+    }
+    .modal-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+    }
+    .modal-tab-btn {
+      padding: 8px 18px;
+      border-radius: 9999px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #94a3b8;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .modal-tab-btn.active {
+      background: #f97316;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4);
+    }
+    .modal-tab-btn:not(.active):hover {
+      color: #f8fafc;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .contact-quick-ribbon {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(249, 115, 22, 0.1);
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      padding: 12px 18px;
+      border-radius: 12px;
+      margin-bottom: 22px;
+    }
+    .contact-quick-ribbon a {
+      color: #fb923c;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .contact-quick-ribbon a:hover {
+      text-decoration: underline;
+      color: #fdba74;
+    }
+    .services-selection-section {
+      margin-bottom: 22px;
+    }
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fb923c;
+      margin: 0 0 10px;
+    }
+    .services-grid-picker {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 600px) {
+      .services-grid-picker {
+        grid-template-columns: 1fr;
+      }
+    }
+    .service-checkbox-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .service-checkbox-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+    .service-checkbox-card.selected {
+      background: rgba(249, 115, 22, 0.15);
+      border-color: #f97316;
+      box-shadow: 0 0 12px rgba(249, 115, 22, 0.2);
+    }
+    .service-checkbox-card input[type="checkbox"] {
+      margin-top: 3px;
+      accent-color: #f97316;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    .service-checkbox-card .service-info strong {
+      display: block;
+      font-size: 13px;
+      color: #f8fafc;
+      line-height: 1.3;
+      margin-bottom: 2px;
+    }
+    .service-checkbox-card .service-info span {
+      display: block;
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.25;
+    }
+    .booking-inputs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 600px) {
+      .booking-inputs-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: #f8fafc;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #f97316;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.25);
+    }
+    .form-group select option {
+      background: #0f121a;
+      color: #fff;
+    }
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    .booking-action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .btn-main-schedule {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 13px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+      transition: all 0.2s ease;
+    }
+    .btn-main-schedule:hover {
+      background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 26px rgba(249, 115, 22, 0.55);
+    }
+    .secondary-action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+    @media (max-width: 600px) {
+      .secondary-action-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .btn-sub-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #e2e8f0;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    .btn-sub-action:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+      color: #fff;
+    }
+    .btn-sub-whatsapp {
+      background: rgba(37, 211, 102, 0.12);
+      border-color: rgba(37, 211, 102, 0.3);
+      color: #4ade80;
+    }
+    .btn-sub-whatsapp:hover {
+      background: rgba(37, 211, 102, 0.22);
+      border-color: #22c55e;
+      color: #86efac;
+    }
+    .status-toast {
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      text-align: center;
+      display: none;
+      margin-top: 10px;
+    }
+    .status-toast.show {
+      display: block;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid #22c55e;
+      color: #86efac;
+    }
+
   </style>
   <script type="importmap">
     {
@@ -2298,50 +2665,183 @@
     </div>
   
     <!-- Bio & Contact Modal -->
+    
+    <!-- Varun Chaturvedi: Interactive Appointment & Services Scheduling Modal -->
     <div class="bio-modal-overlay" id="bio-modal" role="dialog" aria-modal="true" aria-hidden="true">
       <div class="bio-modal-content">
         <button class="bio-modal-close" id="bio-modal-close" aria-label="Close dialog">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
         </button>
-        <span class="bio-modal-badge">Systems Architect &amp; Full-Stack Engineer</span>
-        <h2 class="bio-modal-name">Varun Chaturvedi</h2>
-        <p class="bio-modal-role">Software Engineer @ SAS One · Open for High-Impact Roles &amp; Contracts</p>
-        <p class="bio-modal-text">
-          Full-spectrum Software Engineer with production expertise designing and deploying scalable Python backend architectures (FastAPI, Django REST, Flask), real-time WebSockets communication systems, enterprise inventory platforms (Sash Hyundai StockOne), high-throughput web scraping/deduplication suites across 120+ portals, and autonomous AI orchestration engines (Dataism Engine).
-        </p>
-        <div class="bio-modal-grid">
-          <div class="bio-modal-card">
-            <h4>Location</h4>
-            <p>Lucknow / Noida, India<br><span style="color:#b9b4ae;font-size:11px">Open to Remote Worldwide</span></p>
+
+        <!-- Tabs -->
+        <div class="modal-tabs">
+          <button type="button" class="modal-tab-btn active" id="tab-btn-schedule">📅 Schedule Call &amp; Choose Services</button>
+          <button type="button" class="modal-tab-btn" id="tab-btn-about">👤 About Varun &amp; Portfolio</button>
+        </div>
+
+        <!-- Direct Contact Ribbon -->
+        <div class="contact-quick-ribbon">
+          <div>
+            <span style="font-size:11px;color:#cbd5e1;text-transform:uppercase;letter-spacing:1px;display:block;">Direct Mobile / WhatsApp:</span>
+            <a href="tel:+918439809781">📞 +91 8439809781</a>
           </div>
-          <div class="bio-modal-card">
-            <h4>Direct Contact</h4>
-            <p><a href="mailto:varun.c.works@gmail.com">varun.c.works@gmail.com</a><br><a href="tel:+918439809781">+91 8439809781</a></p>
-          </div>
-          <div class="bio-modal-card">
-            <h4>Key Systems Built</h4>
-            <p>Dataism Engine, LabPortal, AOL Matrimony, StockOne (Hyundai), 120+ Site ETL</p>
-          </div>
-          <div class="bio-modal-card">
-            <h4>Profiles &amp; Code</h4>
-            <p>
-              <a href="https://github.com/varun01234" target="_blank" rel="noopener">GitHub (varun01234)</a> · 
-              <a href="https://www.linkedin.com/in/varun-chaturvedi-b300a8243/" target="_blank" rel="noopener">LinkedIn</a>
-            </p>
+          <div>
+            <span style="font-size:11px;color:#cbd5e1;text-transform:uppercase;letter-spacing:1px;display:block;">Direct Email:</span>
+            <a href="mailto:varun.c.works@gmail.com">✉️ varun.c.works@gmail.com</a>
           </div>
         </div>
-        <div class="bio-modal-card bio-highlight-call" style="margin-bottom:18px;border-color:rgba(200,112,70,0.5);background:rgba(200,112,70,0.1);">
-          <h4>Mobile &amp; WhatsApp Direct</h4>
-          <p style="font-size:17px;font-weight:600;margin:4px 0;"><a href="tel:+918439809781" style="color:#ffaa7a;text-decoration:none;">📞 +91 8439809781</a></p>
-          <p style="font-size:12px;color:#b9b4ae;">Direct line for calls, WhatsApp discussions, and urgent contracts.</p>
+
+        <!-- TAB 1: SCHEDULE CALL & CHOOSE SERVICES -->
+        <div id="tab-content-schedule">
+          <div class="services-selection-section">
+            <h4 class="section-title">Select Services You Need:</h4>
+            <div class="services-grid-picker" id="services-picker">
+              <label class="service-checkbox-card selected">
+                <input type="checkbox" value="AI Agents & Multi-LLM Systems" checked>
+                <div class="service-info">
+                  <strong>AI Agents &amp; Multi-LLM Systems</strong>
+                  <span>Autonomous workflows, RAG, OpenAI, Gemini, Claude, LangChain</span>
+                </div>
+              </label>
+              <label class="service-checkbox-card">
+                <input type="checkbox" value="Full-Stack Web Applications">
+                <div class="service-info">
+                  <strong>Full-Stack Web Development</strong>
+                  <span>React.js, Next.js, TypeScript, Node.js, PostgreSQL, Tailwind</span>
+                </div>
+              </label>
+              <label class="service-checkbox-card">
+                <input type="checkbox" value="Cross-Platform Mobile Apps">
+                <div class="service-info">
+                  <strong>Cross-Platform Mobile Apps</strong>
+                  <span>Production iOS &amp; Android engineering using Flutter &amp; Firebase</span>
+                </div>
+              </label>
+              <label class="service-checkbox-card">
+                <input type="checkbox" value="Custom ERP & Inventory Systems">
+                <div class="service-info">
+                  <strong>Custom ERP &amp; Inventory Systems</strong>
+                  <span>Multi-branch stock tracking, GST invoicing, billing dashboards</span>
+                </div>
+              </label>
+              <label class="service-checkbox-card">
+                <input type="checkbox" value="High-Performance Python APIs">
+                <div class="service-info">
+                  <strong>High-Scale Python APIs</strong>
+                  <span>FastAPI, Django REST, Flask, WebSockets, microservices</span>
+                </div>
+              </label>
+              <label class="service-checkbox-card">
+                <input type="checkbox" value="Web Scraping & Data Pipelines">
+                <div class="service-info">
+                  <strong>Web Scraping &amp; Data Pipelines</strong>
+                  <span>Playwright, 120+ portals automated, ETL, anti-bot mitigation</span>
+                </div>
+              </label>
+              <label class="service-checkbox-card">
+                <input type="checkbox" value="Interactive 3D Web Experiences">
+                <div class="service-info">
+                  <strong>3D Interactive Web Experiences</strong>
+                  <span>Three.js, WebGL shader art, interactive 3D portfolios &amp; UI</span>
+                </div>
+              </label>
+              <label class="service-checkbox-card">
+                <input type="checkbox" value="Technical Architecture & Consulting">
+                <div class="service-info">
+                  <strong>Architecture &amp; Advisory</strong>
+                  <span>Cloud scalability, system review, database tuning, MVP launch</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Date & Time + Client Info -->
+          <div class="booking-inputs-grid">
+            <div class="form-group">
+              <label for="book-date">Preferred Call Date *</label>
+              <input type="date" id="book-date" required>
+            </div>
+            <div class="form-group">
+              <label for="book-slot">Preferred Time Slot *</label>
+              <select id="book-slot">
+                <option value="11:00 AM - 12:00 PM IST">11:00 AM – 12:00 PM IST (Morning)</option>
+                <option value="02:00 PM - 03:00 PM IST" selected>02:00 PM – 03:00 PM IST (Afternoon)</option>
+                <option value="04:30 PM - 05:30 PM IST">04:30 PM – 05:30 PM IST (Late Afternoon)</option>
+                <option value="07:00 PM - 08:00 PM IST">07:00 PM – 08:00 PM IST (Evening)</option>
+                <option value="09:30 PM - 10:30 PM IST">09:30 PM – 10:30 PM IST (Night / US Morning)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="book-name">Your Name / Company *</label>
+              <input type="text" id="book-name" placeholder="John Doe / Acme Corp" required>
+            </div>
+            <div class="form-group">
+              <label for="book-email">Your Email *</label>
+              <input type="email" id="book-email" placeholder="john@example.com" required>
+            </div>
+            <div class="form-group full-width">
+              <label for="book-notes">Project Overview / Goals</label>
+              <textarea id="book-notes" rows="2" placeholder="Brief outline of your product, scope, tech stack or questions..."></textarea>
+            </div>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="booking-action-buttons">
+            <button type="button" class="btn-main-schedule" id="btn-sync-calendar">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span>Schedule Call &amp; Add to Google Calendar</span>
+            </button>
+            <div class="secondary-action-row">
+              <button type="button" class="btn-sub-action" id="btn-send-email-booking">
+                <span>✉️ Send Email Request</span>
+              </button>
+              <button type="button" class="btn-sub-action" id="btn-download-ics">
+                <span>📥 Download Apple .ics</span>
+              </button>
+              <a href="https://wa.me/918439809781?text=Hi%20Varun,%20I%20would%20like%20to%20schedule%20a%20strategy%20call%20regarding%20a%20project." target="_blank" rel="noopener noreferrer" class="btn-sub-action btn-sub-whatsapp" id="btn-whatsapp-booking">
+                <span>💬 WhatsApp (+91 8439809781)</span>
+              </a>
+            </div>
+          </div>
+          <div class="status-toast" id="booking-status-toast"></div>
         </div>
-        <div class="bio-modal-actions">
-          <a href="tel:+918439809781" class="bio-action-btn bio-action-primary">📞 Call +91 8439809781</a>
-          <a href="https://wa.me/918439809781" target="_blank" rel="noopener noreferrer" class="bio-action-btn bio-action-whatsapp" style="background:#25d366;color:#fff;border:none;">💬 WhatsApp</a>
-          <a href="mailto:varun.c.works@gmail.com" class="bio-action-btn bio-action-secondary">✉️ Email</a>
+
+        <!-- TAB 2: ABOUT VARUN & PORTFOLIO -->
+        <div id="tab-content-about" style="display:none;">
+          <span style="display:inline-block;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#f97316;font-weight:700;margin-bottom:8px;">Systems Architect &amp; Full-Stack Engineer</span>
+          <h2 style="margin:0 0 6px;font-size:32px;font-weight:700;">Varun Chaturvedi</h2>
+          <p style="font-size:14px;color:#cbd5e1;margin:0 0 16px;">Software Engineer @ SAS One · Open for High-Impact Roles &amp; Contracts</p>
+          <p style="font-size:14px;line-height:1.6;color:#94a3b8;margin-bottom:20px;">
+            Full-spectrum Software Engineer with production expertise designing and deploying scalable Python backend architectures (FastAPI, Django REST, Flask), real-time WebSockets communication systems, enterprise inventory platforms (Sash Hyundai StockOne), high-throughput web scraping/deduplication suites across 120+ portals, and autonomous AI orchestration engines (Dataism Engine).
+          </p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);padding:12px;border-radius:10px;">
+              <h4 style="margin:0 0 4px;font-size:11px;text-transform:uppercase;color:#f97316;">Location</h4>
+              <p style="margin:0;font-size:13px;color:#f8fafc;">Bareilly / Noida, India<br><span style="color:#94a3b8;font-size:11px;">Open to Remote Worldwide</span></p>
+            </div>
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);padding:12px;border-radius:10px;">
+              <h4 style="margin:0 0 4px;font-size:11px;text-transform:uppercase;color:#f97316;">Direct Phone</h4>
+              <p style="margin:0;font-size:13px;color:#f8fafc;"><a href="tel:+918439809781" style="color:#fb923c;text-decoration:none;">+91 8439809781</a><br><a href="mailto:varun.c.works@gmail.com" style="color:#94a3b8;font-size:11px;">varun.c.works@gmail.com</a></p>
+            </div>
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);padding:12px;border-radius:10px;">
+              <h4 style="margin:0 0 4px;font-size:11px;text-transform:uppercase;color:#f97316;">Flagship Platforms</h4>
+              <p style="margin:0;font-size:13px;color:#f8fafc;">Dataism Engine, LabPortal, AOL Matrimony, Sash StockOne, 120+ Portal Crawlers</p>
+            </div>
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);padding:12px;border-radius:10px;">
+              <h4 style="margin:0 0 4px;font-size:11px;text-transform:uppercase;color:#f97316;">Profiles</h4>
+              <p style="margin:0;font-size:13px;color:#f8fafc;">
+                <a href="https://github.com/varun01234" target="_blank" rel="noopener" style="color:#fb923c;">GitHub (varun01234)</a> · 
+                <a href="https://www.linkedin.com/in/varun-chaturvedi-b300a8243/" target="_blank" rel="noopener" style="color:#fb923c;">LinkedIn</a>
+              </p>
+            </div>
+          </div>
+          <button type="button" class="btn-main-schedule" id="btn-switch-to-schedule">
+            <span>📅 Book Call or Select Services →</span>
+          </button>
         </div>
       </div>
     </div>
+
   </main>
 
   <script type="module">
@@ -2785,17 +3285,17 @@
       pageRake: null
     };
     const themeTargets = {
-      floor: new THREE.Color(0xd8c8aa),
-      wall: new THREE.Color(0xe9dfcb),
-      shelf: new THREE.Color(0x4a2b1d),
-      shelfDark: new THREE.Color(0x2a170f),
-      shadow: new THREE.Color(0x2f1d13),
-      fog: new THREE.Color(0xe9dfcb),
-      hemisphere: new THREE.Color(0xfff8e8),
-      hemisphereGround: new THREE.Color(0x5b4030),
-      key: new THREE.Color(0xffe8c2),
-      fill: new THREE.Color(0xd8e3e7),
-      rim: new THREE.Color(0xd5a45e)
+      floor: new THREE.Color(0x0a0c12),
+      wall: new THREE.Color(0x06070a),
+      shelf: new THREE.Color(0x181a24),
+      shelfDark: new THREE.Color(0x08090d),
+      shadow: new THREE.Color(0x040507),
+      fog: new THREE.Color(0x06070a),
+      hemisphere: new THREE.Color(0xd0d8e8),
+      hemisphereGround: new THREE.Color(0x08090d),
+      key: new THREE.Color(0xf0f4ff),
+      fill: new THREE.Color(0x404858),
+      rim: new THREE.Color(0x606878)
     };
 
     const pointer = {
@@ -3157,14 +3657,14 @@
       ctx.fillStyle = book.foil;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.font = '500 18px Inter, "Helvetica Neue", Arial, sans-serif';
+      ctx.font = '500 18px -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Honest", "Helvetica Neue", Helvetica, Arial, sans-serif';
       ctx.letterSpacing = "4px";
       ctx.fillText(`VARUN CHATURVEDI  /  VOLUME ${book.roman}`, canvasTexture.width / 2, 92);
 
       const titleSize = book.title.length > 10 ? 72 : 88;
-      ctx.font = `400 ${titleSize}px "Iowan Old Style", Baskerville, Georgia, serif`;
+      ctx.font = `400 ${titleSize}px -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Honest", "Helvetica Neue", Helvetica, Arial, sans-serif`;
       ctx.fillText(book.title, canvasTexture.width / 2, canvasTexture.height * 0.72);
-      ctx.font = '500 16px Inter, "Helvetica Neue", Arial, sans-serif';
+      ctx.font = '500 16px -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Honest", "Helvetica Neue", Helvetica, Arial, sans-serif';
       ctx.fillText(book.discipline.toUpperCase(), canvasTexture.width / 2, canvasTexture.height * 0.79);
 
       return configureCanvasTexture(new THREE.CanvasTexture(canvasTexture));
@@ -3183,7 +3683,7 @@
       ctx.textAlign = "left";
       ctx.textBaseline = "alphabetic";
 
-      ctx.font = '500 15px Inter, "Helvetica Neue", Arial, sans-serif';
+      ctx.font = '500 15px -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Honest", "Helvetica Neue", Helvetica, Arial, sans-serif';
       ctx.letterSpacing = "2.8px";
       ctx.fillText(`VARUN CHATURVEDI  /  ${pad(index)}`, 58, 70);
       ctx.globalAlpha = 0.7;
@@ -3195,9 +3695,9 @@
       ctx.globalAlpha = 1;
 
       const titleSize = book.title.length > 10 ? 64 : 78;
-      ctx.font = `400 ${titleSize}px "Iowan Old Style", Baskerville, Georgia, serif`;
+      ctx.font = `400 ${titleSize}px -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Honest", "Helvetica Neue", Helvetica, Arial, sans-serif`;
       ctx.fillText(book.title, 58, 1020);
-      ctx.font = '500 14px Inter, "Helvetica Neue", Arial, sans-serif';
+      ctx.font = '500 14px -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Honest", "Helvetica Neue", Helvetica, Arial, sans-serif';
       ctx.letterSpacing = "2.4px";
       ctx.fillText(book.discipline.toUpperCase(), 60, 1066);
 
@@ -3389,7 +3889,7 @@
         ctx.fillStyle = `rgba(${red},${green},${blue},0.2)`;
         ctx.textAlign = "left";
         ctx.textBaseline = "alphabetic";
-        ctx.font = '500 15px Inter, "Helvetica Neue", Arial, sans-serif';
+        ctx.font = '500 15px -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Honest", "Helvetica Neue", Helvetica, Arial, sans-serif';
         ctx.letterSpacing = "2px";
         ctx.fillText(book.title.toUpperCase(), 84, 98);
         ctx.fillRect(84, 121, 190, 2);
@@ -3408,7 +3908,7 @@
         }
 
         ctx.globalAlpha = 0.32;
-        ctx.font = '400 17px "Iowan Old Style", Baskerville, Georgia, serif';
+        ctx.font = '400 17px -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Honest", "Helvetica Neue", Helvetica, Arial, sans-serif';
         ctx.fillText(book.roman, paperCanvas.width - 104, paperCanvas.height - 72);
         ctx.globalAlpha = 1;
       }
@@ -3480,17 +3980,21 @@
 
     function makeInteriorPageTextures(book) {
       const pageCount = 8;
-      const inkColor = new THREE.Color(book.color).lerp(new THREE.Color(0x211b16), 0.62);
+      const isUserBook = book.id === "varun-chaturvedi" || book.roman === "VII";
+      const inkColor = new THREE.Color(book.color).lerp(new THREE.Color(0x111318), 0.82);
       const ink = `#${inkColor.getHexString()}`;
+      const FONT_SANS = '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Honest", "Helvetica Neue", Arial, sans-serif';
+      const FONT_MONO = '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", "Honest", "Helvetica Neue", Arial, sans-serif';
 
       return Array.from({ length: pageCount }, (_, pageIndex) => {
         const canvas = document.createElement("canvas");
         const logicalWidth = 512;
         const logicalHeight = 768;
-        canvas.width = 384;
-        canvas.height = 576;
+        // High resolution 1024x1536 for crystal sharp readability
+        canvas.width = 1024;
+        canvas.height = 1536;
         const ctx = canvas.getContext("2d");
-        ctx.scale(0.75, 0.75);
+        ctx.scale(2.0, 2.0);
         const random = seededRandom(hashSeed(`${book.id}-leaf-${pageIndex}`) + book.seed);
         drawPaperSurface(ctx, logicalWidth, logicalHeight, random);
         ctx.fillStyle = ink;
@@ -3498,133 +4002,467 @@
         ctx.textAlign = "left";
         ctx.textBaseline = "alphabetic";
 
-        ctx.globalAlpha = 0.58;
-        ctx.font = '500 10px Inter, "Helvetica Neue", Arial, sans-serif';
-        ctx.letterSpacing = "1.8px";
-        ctx.fillText(`VARUN CHATURVEDI  /  VOLUME ${book.roman}`, 48, 48);
+        // Top running header
+        ctx.globalAlpha = 0.85;
+        ctx.font = `600 11px ${FONT_MONO}`;
+        ctx.letterSpacing = "1.5px";
+        ctx.fillText(isUserBook ? "VARUN CHATURVEDI  /  VOLUME VII" : `VARUN CHATURVEDI  /  VOLUME ${book.roman}`, 48, 48);
         ctx.textAlign = "right";
         ctx.fillText(pad(pageIndex + 1), logicalWidth - 48, 48);
         ctx.textAlign = "left";
-        ctx.fillRect(48, 64, logicalWidth - 96, 1);
+        ctx.fillRect(48, 62, logicalWidth - 96, 1.5);
         ctx.globalAlpha = 1;
 
-        if (pageIndex === 0) {
-          ctx.font = '500 12px Inter, "Helvetica Neue", Arial, sans-serif';
-          ctx.letterSpacing = "2.3px";
-          ctx.fillText(book.discipline.toUpperCase(), 54, 174);
-          ctx.font = `400 ${book.title.length > 10 ? 48 : 58}px "Iowan Old Style", Baskerville, Georgia, serif`;
-          ctx.letterSpacing = "0px";
-          drawWrappedCanvasText(ctx, book.title, 52, 246, 18, 58, 2);
-          ctx.globalAlpha = 0.55;
-          ctx.font = '400 22px "Iowan Old Style", Baskerville, Georgia, serif';
-          drawWrappedCanvasText(ctx, book.note, 54, 462, 36, 30, 4);
-        } else if (pageIndex === 1 || pageIndex === 3) {
-          const chapterIndex = pageIndex === 1 ? 0 : 1;
-          ctx.font = '500 11px Inter, "Helvetica Neue", Arial, sans-serif';
-          ctx.letterSpacing = "2px";
-          ctx.fillText(`CHAPTER ${pad(chapterIndex + 1)}`, 54, 166);
-          ctx.font = '400 49px "Iowan Old Style", Baskerville, Georgia, serif';
-          ctx.letterSpacing = "0px";
-          drawWrappedCanvasText(ctx, book.chapters[chapterIndex], 52, 244, 18, 54, 3);
-          ctx.globalAlpha = 0.52;
-          ctx.font = '400 20px "Iowan Old Style", Baskerville, Georgia, serif';
-          drawWrappedCanvasText(
-            ctx,
-            chapterIndex === 0 ? book.note : book.deck,
-            54,
-            438,
-            42,
-            28,
-            6
-          );
-        } else if (pageIndex === 2) {
-          ctx.font = '500 11px Inter, "Helvetica Neue", Arial, sans-serif';
-          ctx.letterSpacing = "2px";
-          ctx.fillText("PLATE 01  /  SYSTEM MOTIF", 54, 146);
-          ctx.save();
-          ctx.globalAlpha = 0.58;
-          drawMotif(ctx, { ...book, foil: ink }, logicalWidth, logicalHeight * 0.92);
-          ctx.restore();
-          ctx.globalAlpha = 0.48;
-          ctx.font = '400 17px "Iowan Old Style", Baskerville, Georgia, serif';
-          drawWrappedCanvasText(ctx, book.theme, 54, 650, 44, 24, 3);
-        } else if (pageIndex === 4) {
-          ctx.font = '500 11px Inter, "Helvetica Neue", Arial, sans-serif';
-          ctx.letterSpacing = "2px";
-          ctx.fillText(`NOTES  /  ${book.chapters[1].toUpperCase()}`, 54, 138);
-          ctx.globalAlpha = 0.44;
-          for (let column = 0; column < 2; column += 1) {
-            const left = 54 + column * 214;
-            for (let line = 0; line < 24; line += 1) {
-              const width = line % 7 === 6 ? 72 + random() * 54 : 138 + random() * 44;
-              ctx.fillRect(left, 190 + line * 18, width, 1.25);
+        if (isUserBook) {
+          // === SPECIAL ULTRA-READABLE PAGES FOR VARUN CHATURVEDI (ABOUT ME) ===
+          if (pageIndex === 0) {
+            // Profile & Prominent Phone/Email
+            ctx.font = `700 12px ${FONT_MONO}`;
+            ctx.letterSpacing = "2px";
+            ctx.fillStyle = "#f97316";
+            ctx.fillText("SYSTEMS ARCHITECT & SOFTWARE ENGINEER", 48, 140);
+            
+            ctx.fillStyle = ink;
+            ctx.font = `800 46px ${FONT_SANS}`;
+            ctx.letterSpacing = "-0.5px";
+            ctx.fillText("Varun", 48, 200);
+            ctx.fillText("Chaturvedi", 48, 248);
+
+            ctx.font = `500 15px ${FONT_SANS}`;
+            ctx.letterSpacing = "0px";
+            ctx.globalAlpha = 0.85;
+            drawWrappedCanvasText(ctx, "Turning Complex Ideas into Scalable, Production-Ready Realities.", 48, 290, 24, 22, 2);
+
+            // Prominent Contact Card Box inside the book
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = "rgba(249, 115, 22, 0.08)";
+            ctx.fillRect(48, 350, logicalWidth - 96, 175);
+            ctx.strokeStyle = "#f97316";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(48, 350, logicalWidth - 96, 175);
+
+            ctx.fillStyle = "#c2410c";
+            ctx.font = `700 11px ${FONT_MONO}`;
+            ctx.letterSpacing = "1.5px";
+            ctx.fillText("DIRECT CONTACT & CALL BOOKING", 64, 380);
+
+            ctx.fillStyle = "#0f172a";
+            ctx.font = `800 20px ${FONT_SANS}`;
+            ctx.letterSpacing = "-0.2px";
+            ctx.fillText("📞 +91 8439809781", 64, 420);
+
+            ctx.font = `600 15px ${FONT_SANS}`;
+            ctx.fillStyle = "#1e293b";
+            ctx.fillText("✉️ varun.c.works@gmail.com", 64, 452);
+
+            ctx.font = `500 13px ${FONT_SANS}`;
+            ctx.fillStyle = "#475569";
+            ctx.fillText("📍 Bareilly / Noida · Open for Global Remote", 64, 480);
+            ctx.fillText("⚡ Click 'Hire / Contact' to Book a Calendar Call", 64, 504);
+
+            ctx.font = `600 12px ${FONT_MONO}`;
+            ctx.fillStyle = "#64748b";
+            ctx.fillText("TURN PAGE FOR FULL SERVICES DIRECTORY →", 48, 620);
+
+          } else if (pageIndex === 1) {
+            // ALL SERVICES PROVIDED
+            ctx.fillStyle = "#f97316";
+            ctx.font = `700 11px ${FONT_MONO}`;
+            ctx.letterSpacing = "2px";
+            ctx.fillText("SERVICES DIRECTORY", 48, 120);
+
+            ctx.fillStyle = ink;
+            ctx.font = `800 32px ${FONT_SANS}`;
+            ctx.letterSpacing = "-0.5px";
+            ctx.fillText("All Services Provided", 48, 160);
+
+            const services = [
+              { num: "01", title: "AI Agents & Multi-LLM Systems", desc: "Autonomous workflows, RAG, OpenAI, Gemini, Claude, LangChain" },
+              { num: "02", title: "Full-Stack Web Applications", desc: "React.js, Next.js, TypeScript, Node.js, PostgreSQL, Tailwind" },
+              { num: "03", title: "Mobile App Development", desc: "Cross-platform iOS & Android engineering using Flutter & Firebase" },
+              { num: "04", title: "Custom ERP & Inventory Systems", desc: "Multi-branch stock tracking, GST invoicing, billing dashboards" },
+              { num: "05", title: "High-Performance Python APIs", desc: "FastAPI, Django REST, Flask, WebSockets, microservices" },
+              { num: "06", title: "Web Scraping & Data Pipelines", desc: "Playwright, 120+ portals automated, ETL, anti-bot bypass" },
+              { num: "07", title: "Interactive 3D Web Experiences", desc: "Three.js, WebGL shader art, interactive 3D portfolios & UI" }
+            ];
+
+            let y = 205;
+            for (const s of services) {
+              ctx.fillStyle = "#ea580c";
+              ctx.font = `700 11px ${FONT_MONO}`;
+              ctx.fillText(s.num, 48, y);
+
+              ctx.fillStyle = ink;
+              ctx.font = `700 14px ${FONT_SANS}`;
+              ctx.fillText(s.title, 76, y);
+
+              ctx.fillStyle = "#334155";
+              ctx.font = `400 11.5px ${FONT_SANS}`;
+              ctx.fillText(s.desc, 76, y + 16);
+              y += 54;
             }
+
+            ctx.fillStyle = "#f97316";
+            ctx.font = `700 11px ${FONT_MONO}`;
+            ctx.fillText("CHOOSE SERVICES IN HIRE FORM TO SCHEDULE CALL", 48, 640);
+
+          } else if (pageIndex === 2) {
+            // Direct Appointment & Booking Schematic
+            ctx.fillStyle = "#f97316";
+            ctx.font = `700 11px ${FONT_MONO}`;
+            ctx.letterSpacing = "2px";
+            ctx.fillText("APPOINTMENT & CALL SCHEDULING", 48, 125);
+
+            ctx.fillStyle = ink;
+            ctx.font = `800 28px ${FONT_SANS}`;
+            ctx.fillText("Book a Strategy Call", 48, 165);
+
+            ctx.fillStyle = "#334155";
+            ctx.font = `500 14px ${FONT_SANS}`;
+            drawWrappedCanvasText(ctx, "Ready to bring your next product or system architecture to life? Pick a date and time slot in the Hire modal to instantly schedule.", 48, 205, 26, 22, 3);
+
+            // Big Contact Card
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(48, 280, logicalWidth - 96, 240);
+            ctx.strokeStyle = "#cbd5e1";
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(48, 280, logicalWidth - 96, 240);
+
+            ctx.fillStyle = "#0f172a";
+            ctx.font = `800 18px ${FONT_SANS}`;
+            ctx.fillText("Direct Booking Channels:", 68, 318);
+
+            ctx.font = `700 16px ${FONT_SANS}`;
+            ctx.fillStyle = "#ea580c";
+            ctx.fillText("📞 Phone / WhatsApp: +91 8439809781", 68, 356);
+
+            ctx.fillStyle = "#1e293b";
+            ctx.fillText("✉️ Email: varun.c.works@gmail.com", 68, 396);
+
+            ctx.font = `500 13px ${FONT_SANS}`;
+            ctx.fillStyle = "#475569";
+            ctx.fillText("📅 Calendar Sync: Google Calendar, Apple (.ics), Outlook", 68, 436);
+            ctx.fillText("💬 WhatsApp: Direct 1-on-1 chat for quick consultation", 68, 464);
+            ctx.fillText("⚡ Turnaround: Response within 2 to 4 business hours", 68, 492);
+
+            ctx.font = `600 12px ${FONT_MONO}`;
+            ctx.fillStyle = "#64748b";
+            ctx.fillText("AVAILABILITY: CONTRACTS, ADVISORY, FULL-TIME", 48, 620);
+
+          } else if (pageIndex === 3) {
+            // Flagship Systems
+            ctx.fillStyle = "#f97316";
+            ctx.font = `700 11px ${FONT_MONO}`;
+            ctx.letterSpacing = "2px";
+            ctx.fillText("PRODUCTION ARCHITECTURES", 48, 125);
+
+            ctx.fillStyle = ink;
+            ctx.font = `800 28px ${FONT_SANS}`;
+            ctx.fillText("Flagship Case Studies", 48, 165);
+
+            const cases = [
+              { name: "Sash Hyundai StockOne", role: "Custom Dealership ERP & Inventory", detail: "Real-time multi-branch vehicle stock, GST billing, role-based dashboards, and audit logs." },
+              { name: "Dataism Engine", role: "Autonomous AI Platform", detail: "Multi-LLM agent foreman, 15-45s UGC video synthesis, lead generation, and automated workflows." },
+              { name: "120+ Portal Scraping Suite", role: "High-Throughput Crawlers", detail: "Automated distributed crawlers, anti-bot mitigation, and 65% SQL query latency reductions." }
+            ];
+
+            let y = 215;
+            for (const c of cases) {
+              ctx.fillStyle = "#0f172a";
+              ctx.font = `700 16px ${FONT_SANS}`;
+              ctx.fillText(c.name, 48, y);
+
+              ctx.fillStyle = "#ea580c";
+              ctx.font = `600 12px ${FONT_MONO}`;
+              ctx.fillText(c.role, 48, y + 20);
+
+              ctx.fillStyle = "#334155";
+              ctx.font = `400 12px ${FONT_SANS}`;
+              drawWrappedCanvasText(ctx, c.detail, 48, y + 40, 24, 18, 2);
+              y += 88;
+            }
+
+          } else if (pageIndex === 4) {
+            // Tech Stack Dossier
+            ctx.fillStyle = "#f97316";
+            ctx.font = `700 11px ${FONT_MONO}`;
+            ctx.letterSpacing = "2px";
+            ctx.fillText("TECHNICAL DOSSIER", 48, 125);
+
+            ctx.fillStyle = ink;
+            ctx.font = `800 28px ${FONT_SANS}`;
+            ctx.fillText("Engineering Stack", 48, 165);
+
+            const stacks = [
+              { cat: "BACKEND & APIS", list: "Python, FastAPI, Django, Flask, Node.js, WebSockets" },
+              { cat: "FRONTEND & MOBILE", list: "React.js, Next.js, TypeScript, Flutter, Vanilla 3D" },
+              { cat: "DATABASES & VECTOR", list: "PostgreSQL, MySQL, Redis, Qdrant Vector Search" },
+              { cat: "AI & ORCHESTRATION", list: "OpenAI, Gemini API, Claude, LangChain, n8n, ComfyUI" },
+              { cat: "INFRA & CLOUD", list: "AWS (EC2, S3), Docker, Linux, CI/CD, Git" }
+            ];
+
+            let y = 215;
+            for (const s of stacks) {
+              ctx.fillStyle = "#ea580c";
+              ctx.font = `700 11px ${FONT_MONO}`;
+              ctx.fillText(s.cat, 48, y);
+
+              ctx.fillStyle = "#0f172a";
+              ctx.font = `600 14px ${FONT_SANS}`;
+              ctx.fillText(s.list, 48, y + 22);
+              y += 62;
+            }
+
+          } else if (pageIndex === 5) {
+            // Metrics & Testimonial
+            ctx.fillStyle = "#f97316";
+            ctx.font = `700 11px ${FONT_MONO}`;
+            ctx.letterSpacing = "2px";
+            ctx.fillText("PROVEN RESULTS", 48, 125);
+
+            ctx.fillStyle = ink;
+            ctx.font = `800 28px ${FONT_SANS}`;
+            ctx.fillText("Key Impact Metrics", 48, 165);
+
+            const metrics = [
+              { stat: "65%", label: "Query Latency Reduction", sub: "Indexed high-volume SQL schemas & tuned execution plans." },
+              { stat: "120+", label: "Portals Automated", sub: "Engineered headless scraping clusters handling rate-limits." },
+              { stat: "4+", label: "Flagship Cloud Platforms", sub: "Architected and delivered from scratch to production." }
+            ];
+
+            let y = 220;
+            for (const m of metrics) {
+              ctx.fillStyle = "#ea580c";
+              ctx.font = `800 32px ${FONT_SANS}`;
+              ctx.fillText(m.stat, 48, y);
+
+              ctx.fillStyle = "#0f172a";
+              ctx.font = `700 15px ${FONT_SANS}`;
+              ctx.fillText(m.label, 130, y - 8);
+
+              ctx.fillStyle = "#475569";
+              ctx.font = `400 12px ${FONT_SANS}`;
+              ctx.fillText(m.sub, 130, y + 12);
+              y += 82;
+            }
+
+          } else if (pageIndex === 6) {
+            // Engagement & Call to Action
+            ctx.fillStyle = "#f97316";
+            ctx.font = `700 11px ${FONT_MONO}`;
+            ctx.letterSpacing = "2px";
+            ctx.fillText("ENGAGEMENT & HIRING", 48, 125);
+
+            ctx.fillStyle = ink;
+            ctx.font = `800 28px ${FONT_SANS}`;
+            ctx.fillText("Work With Varun", 48, 165);
+
+            ctx.fillStyle = "#334155";
+            ctx.font = `500 14px ${FONT_SANS}`;
+            drawWrappedCanvasText(ctx, "Available for full-time engineering roles, technical advisory, high-impact contract builds, and end-to-end MVP execution.", 48, 205, 26, 22, 3);
+
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(48, 290, logicalWidth - 96, 200);
+            ctx.strokeStyle = "#ea580c";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(48, 290, logicalWidth - 96, 200);
+
+            ctx.fillStyle = "#ea580c";
+            ctx.font = `700 12px ${FONT_MONO}`;
+            ctx.fillText("SCHEDULE YOUR CALL TODAY", 68, 330);
+
+            ctx.fillStyle = "#0f172a";
+            ctx.font = `800 20px ${FONT_SANS}`;
+            ctx.fillText("📞 +91 8439809781", 68, 370);
+
+            ctx.font = `600 15px ${FONT_SANS}`;
+            ctx.fillStyle = "#1e293b";
+            ctx.fillText("✉️ varun.c.works@gmail.com", 68, 410);
+
+            ctx.font = `500 13px ${FONT_SANS}`;
+            ctx.fillStyle = "#64748b";
+            ctx.fillText("Click Hire/Contact button to sync with calendar", 68, 450);
+
+          } else {
+            // Colophon
+            ctx.font = `700 11px ${FONT_MONO}`;
+            ctx.letterSpacing = "2px";
+            ctx.fillStyle = "#f97316";
+            ctx.fillText("COLOPHON", 48, 150);
+
+            ctx.fillStyle = ink;
+            ctx.font = `800 32px ${FONT_SANS}`;
+            ctx.fillText("Varun Chaturvedi", 48, 200);
+
+            ctx.font = `500 14px ${FONT_SANS}`;
+            ctx.fillStyle = "#334155";
+            drawWrappedCanvasText(
+              ctx,
+              "Software Engineer @ SAS One. Full spectrum architect of AI agent workflows, Python backend engines, and responsive web applications.",
+              48,
+              240,
+              26,
+              22,
+              4
+            );
+
+            ctx.font = `700 15px ${FONT_SANS}`;
+            ctx.fillStyle = "#0f172a";
+            ctx.fillText("Phone: +91 8439809781", 48, 360);
+            ctx.fillText("Email: varun.c.works@gmail.com", 48, 390);
+            ctx.fillText("GitHub: github.com/varun01234", 48, 420);
+            ctx.fillText("LinkedIn: linkedin.com/in/varun-chaturvedi-b300a8243", 48, 450);
+
+            ctx.font = `600 11px ${FONT_MONO}`;
+            ctx.fillStyle = "#64748b";
+            ctx.fillText("VOLUME VII · MONOGRAPH SPECIMEN EDITION", 48, 640);
           }
-          ctx.globalAlpha = 0.78;
-          ctx.strokeRect(54, 654, 404, 54);
-          ctx.font = '500 10px Inter, "Helvetica Neue", Arial, sans-serif';
-          ctx.letterSpacing = "1.4px";
-          ctx.fillText(book.motif.toUpperCase(), 70, 686);
-        } else if (pageIndex === 5) {
-          ctx.font = '500 11px Inter, "Helvetica Neue", Arial, sans-serif';
-          ctx.letterSpacing = "2px";
-          ctx.fillText("CHAPTER 03", 54, 166);
-          ctx.font = '400 49px "Iowan Old Style", Baskerville, Georgia, serif';
-          ctx.letterSpacing = "0px";
-          drawWrappedCanvasText(ctx, book.chapters[2], 52, 244, 18, 54, 3);
-          ctx.globalAlpha = 0.52;
-          ctx.font = '400 20px "Iowan Old Style", Baskerville, Georgia, serif';
-          drawWrappedCanvasText(ctx, book.deck, 54, 438, 42, 28, 6);
-        } else if (pageIndex === 6) {
-          ctx.font = '500 11px Inter, "Helvetica Neue", Arial, sans-serif';
-          ctx.letterSpacing = "2px";
-          ctx.fillText("PLATE 02  /  TECHNICAL SYSTEM", 54, 146);
-          ctx.save();
-          ctx.translate(logicalWidth * 0.5, 380);
-          ctx.globalAlpha = 0.55;
-          for (let ring = 0; ring < 5; ring += 1) {
-            const radius = 38 + ring * 34;
-            ctx.beginPath();
-            ctx.arc(0, 0, radius, 0, Math.PI * 2);
-            ctx.stroke();
-          }
-          for (let spoke = 0; spoke < 8; spoke += 1) {
-            const angle = spoke * Math.PI * 0.25;
-            ctx.beginPath();
-            ctx.moveTo(Math.cos(angle) * 36, Math.sin(angle) * 36);
-            ctx.lineTo(Math.cos(angle) * 176, Math.sin(angle) * 176);
-            ctx.stroke();
-          }
-          ctx.restore();
-          ctx.globalAlpha = 0.48;
-          ctx.font = '400 17px "Iowan Old Style", Baskerville, Georgia, serif';
-          drawWrappedCanvasText(ctx, book.theme, 54, 650, 44, 24, 3);
+
         } else {
-          ctx.font = '500 11px Inter, "Helvetica Neue", Arial, sans-serif';
-          ctx.letterSpacing = "2px";
-          ctx.fillText("COLOPHON", 54, 164);
-          ctx.font = '400 32px "Iowan Old Style", Baskerville, Georgia, serif';
-          ctx.letterSpacing = "0px";
-          ctx.fillText(book.title, 54, 230);
-          ctx.globalAlpha = 0.58;
-          ctx.font = '400 18px "Iowan Old Style", Baskerville, Georgia, serif';
-          drawWrappedCanvasText(
-            ctx,
-            `${book.binding}. ${book.format}. Conceived as an original editorial study for Working Volumes.`,
-            54,
-            306,
-            44,
-            28,
-            7
-          );
-          ctx.globalAlpha = 0.74;
-          ctx.font = '500 10px Inter, "Helvetica Neue", Arial, sans-serif';
-          ctx.letterSpacing = "1.8px";
-          ctx.fillText(`SPECIMEN ${book.roman} / ${book.seed}  ·  IMAGINED EDITION`, 54, 676);
+          // === ALL OTHER BOOKS (VOLUMES I TO VI) WITH CRISP APPLE FONTS & HIGH CONTRAST ===
+          if (pageIndex === 0) {
+            ctx.font = `700 12px ${FONT_MONO}`;
+            ctx.letterSpacing = "2.3px";
+            ctx.fillText(book.discipline.toUpperCase(), 54, 160);
+            ctx.font = `800 ${book.title.length > 10 ? 44 : 52}px ${FONT_SANS}`;
+            ctx.letterSpacing = "-0.5px";
+            drawWrappedCanvasText(ctx, book.title, 52, 226, 18, 54, 2);
+            ctx.globalAlpha = 0.9;
+            ctx.font = `500 18px ${FONT_SANS}`;
+            drawWrappedCanvasText(ctx, book.note, 54, 420, 36, 28, 4);
+
+            ctx.globalAlpha = 1;
+            ctx.font = `600 11px ${FONT_MONO}`;
+            ctx.fillText(`ENGINEERING: ${book.role}`, 54, 600);
+
+          } else if (pageIndex === 1 || pageIndex === 3) {
+            const chapterIndex = pageIndex === 1 ? 0 : 1;
+            ctx.font = `700 11px ${FONT_MONO}`;
+            ctx.letterSpacing = "2px";
+            ctx.fillText(`CHAPTER ${pad(chapterIndex + 1)}`, 54, 160);
+            ctx.font = `800 42px ${FONT_SANS}`;
+            ctx.letterSpacing = "-0.5px";
+            drawWrappedCanvasText(ctx, book.chapters[chapterIndex], 52, 224, 18, 50, 3);
+            ctx.globalAlpha = 0.9;
+            ctx.font = `500 16px ${FONT_SANS}`;
+            drawWrappedCanvasText(
+              ctx,
+              chapterIndex === 0 ? book.note : book.deck,
+              54,
+              410,
+              40,
+              26,
+              6
+            );
+          } else if (pageIndex === 2) {
+            ctx.font = `700 11px ${FONT_MONO}`;
+            ctx.letterSpacing = "2px";
+            ctx.fillText("PLATE 01  /  SYSTEM MOTIF", 54, 146);
+            ctx.save();
+            ctx.globalAlpha = 0.85;
+            drawMotif(ctx, { ...book, foil: ink }, logicalWidth, logicalHeight * 0.92);
+            ctx.restore();
+            ctx.globalAlpha = 0.9;
+            ctx.font = `500 15px ${FONT_SANS}`;
+            drawWrappedCanvasText(ctx, book.theme, 54, 640, 44, 24, 3);
+          } else if (pageIndex === 4) {
+            ctx.font = `700 11px ${FONT_MONO}`;
+            ctx.letterSpacing = "2px";
+            ctx.fillText(`TECHNICAL ARCHITECTURE  /  ${book.chapters[1]?.toUpperCase() || "SYSTEM"}`, 54, 138);
+            
+            ctx.globalAlpha = 0.95;
+            ctx.font = `700 15px ${FONT_SANS}`;
+            ctx.fillText("Production Specifications:", 54, 185);
+
+            if (book.features && book.features.length) {
+              let fy = 220;
+              for (const feat of book.features.slice(0, 4)) {
+                ctx.fillStyle = "#ea580c";
+                ctx.fillText("•", 54, fy);
+                ctx.fillStyle = ink;
+                ctx.font = `500 13px ${FONT_SANS}`;
+                drawWrappedCanvasText(ctx, feat, 70, fy, 32, 20, 2);
+                fy += 56;
+              }
+            } else {
+              for (let column = 0; column < 2; column += 1) {
+                const left = 54 + column * 214;
+                for (let line = 0; line < 14; line += 1) {
+                  const width = line % 7 === 6 ? 72 + random() * 54 : 138 + random() * 44;
+                  ctx.fillRect(left, 220 + line * 22, width, 1.5);
+                }
+              }
+            }
+
+            ctx.strokeRect(54, 630, 404, 50);
+            ctx.font = `700 11px ${FONT_MONO}`;
+            ctx.letterSpacing = "1.4px";
+            ctx.fillText(book.motif.toUpperCase(), 70, 660);
+
+          } else if (pageIndex === 5) {
+            ctx.font = `700 11px ${FONT_MONO}`;
+            ctx.letterSpacing = "2px";
+            ctx.fillText("CHAPTER 03", 54, 160);
+            ctx.font = `800 42px ${FONT_SANS}`;
+            ctx.letterSpacing = "-0.5px";
+            drawWrappedCanvasText(ctx, book.chapters[2] || book.title, 52, 224, 18, 50, 3);
+            ctx.globalAlpha = 0.9;
+            ctx.font = `500 16px ${FONT_SANS}`;
+            drawWrappedCanvasText(ctx, book.deck, 54, 410, 40, 26, 6);
+          } else if (pageIndex === 6) {
+            ctx.font = `700 11px ${FONT_MONO}`;
+            ctx.letterSpacing = "2px";
+            ctx.fillText("PLATE 02  /  TECHNICAL SCHEMATIC", 54, 146);
+            ctx.save();
+            ctx.translate(logicalWidth * 0.5, 380);
+            ctx.globalAlpha = 0.75;
+            for (let ring = 0; ring < 5; ring += 1) {
+              const radius = 38 + ring * 34;
+              ctx.beginPath();
+              ctx.arc(0, 0, radius, 0, Math.PI * 2);
+              ctx.stroke();
+            }
+            for (let spoke = 0; spoke < 8; spoke += 1) {
+              const angle = spoke * Math.PI * 0.25;
+              ctx.beginPath();
+              ctx.moveTo(Math.cos(angle) * 36, Math.sin(angle) * 36);
+              ctx.lineTo(Math.cos(angle) * 176, Math.sin(angle) * 176);
+              ctx.stroke();
+            }
+            ctx.restore();
+            ctx.globalAlpha = 0.9;
+            ctx.font = `500 15px ${FONT_SANS}`;
+            drawWrappedCanvasText(ctx, book.theme, 54, 640, 44, 24, 3);
+          } else {
+            ctx.font = `700 11px ${FONT_MONO}`;
+            ctx.letterSpacing = "2px";
+            ctx.fillText("COLOPHON", 54, 164);
+            ctx.font = `800 32px ${FONT_SANS}`;
+            ctx.letterSpacing = "-0.5px";
+            ctx.fillText(book.title, 54, 220);
+            ctx.globalAlpha = 0.9;
+            ctx.font = `500 15px ${FONT_SANS}`;
+            drawWrappedCanvasText(
+              ctx,
+              `${book.binding}. ${book.format}. Engineered by Varun Chaturvedi.`,
+              54,
+              270,
+              40,
+              24,
+              4
+            );
+            ctx.font = `700 12px ${FONT_MONO}`;
+            ctx.fillText(`CONTACT: +91 8439809781 · varun.c.works@gmail.com`, 54, 410);
+
+            ctx.globalAlpha = 0.85;
+            ctx.font = `600 10px ${FONT_MONO}`;
+            ctx.letterSpacing = "1.8px";
+            ctx.fillText(`SPECIMEN ${book.roman} / ${book.seed} · WORKING VOLUMES`, 54, 676);
+          }
         }
 
-        ctx.globalAlpha = 0.62;
-        ctx.fillRect(48, logicalHeight - 48, logicalWidth - 96, 1);
+        ctx.globalAlpha = 0.85;
+        ctx.fillRect(48, logicalHeight - 48, logicalWidth - 96, 1.5);
         ctx.globalAlpha = 1;
         const texture = configureCanvasTexture(new THREE.CanvasTexture(canvas), {
           anisotropy: 16
@@ -3829,20 +4667,20 @@
 
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.font = '500 24px Inter, "Helvetica Neue", Arial, sans-serif';
+      ctx.font = '500 24px -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Honest", "Helvetica Neue", Helvetica, Arial, sans-serif';
       ctx.letterSpacing = "5px";
       ctx.fillText(book.roman, foilCanvas.width * 0.5, 118);
 
       ctx.save();
       ctx.translate(foilCanvas.width * 0.5, foilCanvas.height * 0.5);
       ctx.rotate(Math.PI / 2);
-      ctx.font = `400 ${book.title.length > 10 ? 58 : 68}px "Iowan Old Style", Baskerville, Georgia, serif`;
+      ctx.font = `400 ${book.title.length > 10 ? 58 : 68}px -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Honest", "Helvetica Neue", Helvetica, Arial, sans-serif`;
       ctx.letterSpacing = "0px";
       ctx.fillText(book.title, 0, 0);
       ctx.restore();
 
       ctx.save();
-      ctx.font = '600 16px Inter, "Helvetica Neue", Arial, sans-serif';
+      ctx.font = '600 16px -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Honest", "Helvetica Neue", Helvetica, Arial, sans-serif';
       ctx.letterSpacing = "2px";
       ctx.fillText("V. CHATURVEDI", foilCanvas.width * 0.5, foilCanvas.height - 120);
       ctx.restore();
@@ -3910,7 +4748,7 @@
       ctx.textAlign = "left";
       ctx.textBaseline = "alphabetic";
 
-      ctx.font = '500 16px Inter, "Helvetica Neue", Arial, sans-serif';
+      ctx.font = '500 16px -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Honest", "Helvetica Neue", Helvetica, Arial, sans-serif';
       ctx.letterSpacing = "3px";
       ctx.fillText(`VARUN CHATURVEDI  /  VOLUME ${book.roman}`, 68, 82);
       ctx.globalAlpha = 0.72;
@@ -3932,10 +4770,10 @@
       ctx.lineTo(548, 574);
       ctx.stroke();
 
-      ctx.font = `400 ${book.title.length > 10 ? 52 : 62}px "Iowan Old Style", Baskerville, Georgia, serif`;
+      ctx.font = `400 ${book.title.length > 10 ? 52 : 62}px -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Honest", "Helvetica Neue", Helvetica, Arial, sans-serif`;
       ctx.letterSpacing = "0px";
       ctx.fillText(book.title, 68, 956);
-      ctx.font = '500 15px Inter, "Helvetica Neue", Arial, sans-serif';
+      ctx.font = '500 15px -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Honest", "Helvetica Neue", Helvetica, Arial, sans-serif';
       ctx.letterSpacing = "2.6px";
       ctx.fillText(book.discipline.toUpperCase(), 70, 1004);
       ctx.globalAlpha = 0.68;
@@ -5087,6 +5925,21 @@
       if (liveLink) {
         liveLink.href = book.liveUrl || "#";
         liveLink.textContent = book.urlLabel || "View Project ↗";
+
+        if (book.id === "varun-chaturvedi" || book.roman === "VII") {
+          liveLink.onclick = (e) => {
+            e.preventDefault();
+            if (typeof showScheduleTab === "function") showScheduleTab();
+            const bModal = document.querySelector("#bio-modal");
+            if (bModal) {
+              bModal.classList.add("active");
+              bModal.setAttribute("aria-hidden", "false");
+            }
+          };
+        } else {
+          liveLink.onclick = null;
+        }
+
         if (!book.liveUrl || book.liveUrl.startsWith("#")) {
           liveLink.classList.add("disabled-link");
         } else {
@@ -5592,7 +6445,8 @@
       pageDrag.direction = 0;
       pageDrag.kind = null;
       canvas.classList.remove("is-page-dragging");
-      controls.enabled = mode === "detail";
+      controls.enabled = false;
+      controls.enableRotate = false;
       if (
         capturedPointerId !== null
         && canvas.hasPointerCapture?.(capturedPointerId)
@@ -6050,8 +6904,9 @@
       mode = "detail";
       transitionTime = 1;
       controls.target.copy(inspectCameraTarget);
-      controls.enabled = true;
-      controls.enableDamping = !reducedMotion;
+      controls.enabled = false;
+      controls.enableRotate = false;
+      controls.enableDamping = false;
       controls.update();
       updatePageControls(false);
       experience.classList.remove("is-opening");
@@ -6577,7 +7432,7 @@
       renderer.setClearColor(0x000000, 0);
 
       scene = new THREE.Scene();
-      scene.fog = new THREE.FogExp2(0xe9dfcb, 0.027);
+      scene.fog = new THREE.FogExp2(0x06070a, 0.032);
       const pmremGenerator = new THREE.PMREMGenerator(renderer);
       environmentTarget = pmremGenerator.fromScene(new RoomEnvironment(), 0.04);
       scene.environment = environmentTarget.texture;
@@ -6595,6 +7450,7 @@
 
       controls = new OrbitControls(camera, canvas);
       controls.enabled = false;
+      controls.enableRotate = false;
       controls.enableDamping = !reducedMotion;
       controls.dampingFactor = 0.075;
       controls.enablePan = true;
@@ -6647,6 +7503,15 @@
       nextButton.addEventListener("click", () => navigate(1, nextButton));
       inspectButton.addEventListener("click", () => openDetail(inspectButton));
       closeButton.addEventListener("click", closeDetail);
+
+    const fixedLobbyBtn = document.querySelector("#fixed-lobby-btn");
+    if (fixedLobbyBtn) {
+      fixedLobbyBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        closeDetail();
+      });
+    }
+
       toggleBookButton.addEventListener("click", () => setReadingOpen(!readingOpen));
       previousPageButton.addEventListener("click", () => turnPage(-1));
       nextPageButton.addEventListener("click", () => turnPage(1));
@@ -6707,6 +7572,285 @@
       showFallback("The interactive shelf could not be prepared. The complete static catalog remains available.");
     });
     window.addEventListener("beforeunload", disposeExperience, { once: true });
+  
+    // === INTERACTIVE APPOINTMENT & CALENDAR LOGIC ===
+    const tabBtnSchedule = document.querySelector("#tab-btn-schedule");
+    const tabBtnAbout = document.querySelector("#tab-btn-about");
+    const tabContentSchedule = document.querySelector("#tab-content-schedule");
+    const tabContentAbout = document.querySelector("#tab-content-about");
+    const btnSwitchToSchedule = document.querySelector("#btn-switch-to-schedule");
+    const servicesPicker = document.querySelector("#services-picker");
+    const bookDateInput = document.querySelector("#book-date");
+    const bookSlotSelect = document.querySelector("#book-slot");
+    const bookNameInput = document.querySelector("#book-name");
+    const bookEmailInput = document.querySelector("#book-email");
+    const bookNotesInput = document.querySelector("#book-notes");
+    const btnSyncCalendar = document.querySelector("#btn-sync-calendar");
+    const btnSendEmailBooking = document.querySelector("#btn-send-email-booking");
+    const btnDownloadIcs = document.querySelector("#btn-download-ics");
+    const btnWhatsappBooking = document.querySelector("#btn-whatsapp-booking");
+    const bookingStatusToast = document.querySelector("#booking-status-toast");
+
+    // Pre-fill tomorrow as default booking date
+    if (bookDateInput) {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      bookDateInput.value = tomorrow.toISOString().split("T")[0];
+      bookDateInput.min = new Date().toISOString().split("T")[0];
+    }
+
+    // Toggle service card visual selection
+    if (servicesPicker) {
+      servicesPicker.querySelectorAll(".service-checkbox-card").forEach(card => {
+        const checkbox = card.querySelector("input[type='checkbox']");
+        card.addEventListener("click", (e) => {
+          if (e.target !== checkbox) {
+            checkbox.checked = !checkbox.checked;
+          }
+          card.classList.toggle("selected", checkbox.checked);
+          updateWhatsappLink();
+        });
+      });
+    }
+
+    // Switch Tabs
+    function showScheduleTab() {
+      if (tabBtnSchedule && tabBtnAbout && tabContentSchedule && tabContentAbout) {
+        tabBtnSchedule.classList.add("active");
+        tabBtnAbout.classList.remove("active");
+        tabContentSchedule.style.display = "block";
+        tabContentAbout.style.display = "none";
+      }
+    }
+
+    function showAboutTab() {
+      if (tabBtnSchedule && tabBtnAbout && tabContentSchedule && tabContentAbout) {
+        tabBtnAbout.classList.add("active");
+        tabBtnSchedule.classList.remove("active");
+        tabContentSchedule.style.display = "none";
+        tabContentAbout.style.display = "block";
+      }
+    }
+
+    if (tabBtnSchedule) tabBtnSchedule.addEventListener("click", showScheduleTab);
+    if (tabBtnAbout) tabBtnAbout.addEventListener("click", showAboutTab);
+    if (btnSwitchToSchedule) btnSwitchToSchedule.addEventListener("click", showScheduleTab);
+
+    // Get selected services
+    function getSelectedServices() {
+      if (!servicesPicker) return [];
+      const checked = [];
+      servicesPicker.querySelectorAll("input[type='checkbox']:checked").forEach(cb => {
+        checked.push(cb.value);
+      });
+      return checked.length > 0 ? checked : ["Full-Stack Software Architecture Consultation"];
+    }
+
+    function getBookingDetails() {
+      const name = (bookNameInput?.value || "").trim() || "Prospective Client / Partner";
+      const email = (bookEmailInput?.value || "").trim() || "Not provided";
+      const date = bookDateInput?.value || new Date().toISOString().split("T")[0];
+      const slot = bookSlotSelect?.value || "02:00 PM - 03:00 PM IST";
+      const notes = (bookNotesInput?.value || "").trim();
+      const services = getSelectedServices();
+
+      return { name, email, date, slot, notes, services };
+    }
+
+    // Generate Google Calendar Link & launch
+    function openGoogleCalendar(details) {
+      const dateParts = details.date.split("-");
+      const year = dateParts[0];
+      const month = dateParts[1];
+      const day = dateParts[2];
+      
+      let startHour = 14;
+      let startMinute = 0;
+      if (details.slot.includes("11:00 AM")) { startHour = 11; }
+      else if (details.slot.includes("04:30 PM")) { startHour = 16; startMinute = 30; }
+      else if (details.slot.includes("07:00 PM")) { startHour = 19; }
+      else if (details.slot.includes("09:30 PM")) { startHour = 21; startMinute = 30; }
+
+      const startDate = new Date(Date.UTC(parseInt(year), parseInt(month) - 1, parseInt(day), startHour - 5, startMinute - 30));
+      const endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
+
+      const fmt = (d) => d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+      const startStr = fmt(startDate);
+      const endStr = fmt(endDate);
+
+      const title = `Strategy & Project Call: ${details.name} & Varun Chaturvedi`;
+      const desc = [
+        `Client Name: ${details.name}`,
+        `Client Email: ${details.email}`,
+        `Scheduled Date: ${details.date} (${details.slot})`,
+        `Selected Services:`,
+        details.services.map(s => `• ${s}`).join("\n"),
+        details.notes ? `\nProject Notes:\n${details.notes}` : "",
+        `\nHost: Varun Chaturvedi (varun.c.works@gmail.com | +91 8439809781)`
+      ].join("\n");
+
+      const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startStr}/${endStr}&details=${encodeURIComponent(desc)}&add=varun.c.works@gmail.com`;
+      window.open(gcalUrl, "_blank", "noopener,noreferrer");
+
+      // Also trigger email
+      sendEmailRequest(details, false);
+      showToast("✓ Google Calendar opened & confirmation email drafted!");
+    }
+
+    // Generate mailto
+    function sendEmailRequest(details, showUserToast = true) {
+      const subject = `[Project Call Scheduled] ${details.name} - ${details.services[0]}`;
+      const body = [
+        `Hi Varun,`,
+        ``,
+        `I would like to schedule a strategy and project call with you.`,
+        ``,
+        `Client / Company: ${details.name}`,
+        `Email: ${details.email}`,
+        `Preferred Date: ${details.date}`,
+        `Preferred Time Slot: ${details.slot}`,
+        ``,
+        `Services Selected:`,
+        details.services.map(s => `  • ${s}`).join("\n"),
+        ``,
+        details.notes ? `Project Details & Notes:\n${details.notes}\n\n` : "",
+        `Please confirm your availability on Google Calendar or reply to this email.`,
+        ``,
+        `Regards,`,
+        details.name
+      ].join("\n");
+
+      const mailto = `mailto:varun.c.works@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailto;
+
+      if (showUserToast) {
+        showToast("✓ Email client opened to varun.c.works@gmail.com!");
+      }
+    }
+
+    // Generate .ics calendar download
+    function downloadIcsFile(details) {
+      const dateParts = details.date.split("-");
+      const year = dateParts[0];
+      const month = dateParts[1];
+      const day = dateParts[2];
+      
+      let startHour = 14;
+      let startMinute = 0;
+      if (details.slot.includes("11:00 AM")) { startHour = 11; }
+      else if (details.slot.includes("04:30 PM")) { startHour = 16; startMinute = 30; }
+      else if (details.slot.includes("07:00 PM")) { startHour = 19; }
+      else if (details.slot.includes("09:30 PM")) { startHour = 21; startMinute = 30; }
+
+      const startDate = new Date(Date.UTC(parseInt(year), parseInt(month) - 1, parseInt(day), startHour - 5, startMinute - 30));
+      const endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
+      const fmt = (d) => d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+
+      const icsLines = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Varun Chaturvedi//Portfolio Appointment//EN",
+        "CALSCALE:GREGORIAN",
+        "METHOD:REQUEST",
+        "BEGIN:VEVENT",
+        `UID:call-${Date.now()}@varunchaturvedi.com`,
+        `DTSTAMP:${fmt(new Date())}`,
+        `DTSTART:${fmt(startDate)}`,
+        `DTEND:${fmt(endDate)}`,
+        `SUMMARY:Strategy Call: ${details.name} & Varun Chaturvedi`,
+        `DESCRIPTION:Services Requested: ${details.services.join(", ")}\\nClient: ${details.name} (${details.email})\\nHost: Varun Chaturvedi (+91 8439809781 | varun.c.works@gmail.com)`,
+        "LOCATION:Google Meet / Zoom / Phone (+91 8439809781)",
+        "ORGANIZER;CN=Varun Chaturvedi:MAILTO:varun.c.works@gmail.com",
+        `ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;CN=${details.name}:MAILTO:${details.email}`,
+        "STATUS:CONFIRMED",
+        "END:VEVENT",
+        "END:VCALENDAR"
+      ].join("\r\n");
+
+      const blob = new Blob([icsLines], { type: "text/calendar;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "call-with-varun-chaturvedi.ics";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast("✓ .ics Calendar invite downloaded!");
+    }
+
+    function updateWhatsappLink() {
+      if (!btnWhatsappBooking) return;
+      const details = getBookingDetails();
+      const text = `Hi Varun! I would like to schedule a call on ${details.date} (${details.slot}). Services: ${details.services.slice(0, 2).join(", ")}. My name is ${details.name}.`;
+      btnWhatsappBooking.href = `https://wa.me/918439809781?text=${encodeURIComponent(text)}`;
+    }
+
+    function showToast(msg) {
+      if (!bookingStatusToast) return;
+      bookingStatusToast.textContent = msg;
+      bookingStatusToast.classList.add("show");
+      setTimeout(() => {
+        bookingStatusToast.classList.remove("show");
+      }, 5000);
+    }
+
+    if (btnSyncCalendar) {
+      btnSyncCalendar.addEventListener("click", () => {
+        openGoogleCalendar(getBookingDetails());
+      });
+    }
+
+    if (btnSendEmailBooking) {
+      btnSendEmailBooking.addEventListener("click", () => {
+        sendEmailRequest(getBookingDetails(), true);
+      });
+    }
+
+    if (btnDownloadIcs) {
+      btnDownloadIcs.addEventListener("click", () => {
+        downloadIcsFile(getBookingDetails());
+      });
+    }
+
+    // Modal Openers
+    const btnBio = document.querySelector("#btn-bio");
+    const btnContactModal = document.querySelector("#btn-contact-modal");
+    const bioModal = document.querySelector("#bio-modal");
+    const bioModalClose = document.querySelector("#bio-modal-close");
+
+    if (btnBio && bioModal) {
+      btnBio.addEventListener("click", () => {
+        showAboutTab();
+        bioModal.classList.add("active");
+        bioModal.setAttribute("aria-hidden", "false");
+      });
+    }
+
+    if (btnContactModal && bioModal) {
+      btnContactModal.addEventListener("click", () => {
+        showScheduleTab();
+        bioModal.classList.add("active");
+        bioModal.setAttribute("aria-hidden", "false");
+      });
+    }
+
+    if (bioModalClose && bioModal) {
+      bioModalClose.addEventListener("click", () => {
+        bioModal.classList.remove("active");
+        bioModal.setAttribute("aria-hidden", "true");
+      });
+    }
+
+    if (bioModal) {
+      bioModal.addEventListener("click", (e) => {
+        if (e.target === bioModal) {
+          bioModal.classList.remove("active");
+          bioModal.setAttribute("aria-hidden", "true");
+        }
+      });
+    }
+
   </script>
 </body>
 </html>
